@@ -1,7 +1,7 @@
 package hmac
 
 import (
-	"crypto/hmac"
+	ghmac "crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
 	"strconv"
@@ -26,7 +26,7 @@ func SignRequestWithTimestamp(method, path, secret, timestamp string) string {
 
 func sign(method, path, secret, timestamp string) string {
 	payload := strings.ToUpper(method) + path + timestamp
-	mac := hmac.New(sha256.New, []byte(secret))
+	mac := ghmac.New(sha256.New, []byte(secret))
 	mac.Write([]byte(payload))
 	return hex.EncodeToString(mac.Sum(nil))
 }

@@ -1,12 +1,9 @@
 package hmac
 
 import (
-	"crypto/hmac"
-	"crypto/sha256"
-	"encoding/hex"
+	ghmac "crypto/hmac"
 	"net/http"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -41,7 +38,7 @@ func Middleware(secret string) func(http.Handler) http.Handler {
 			}
 
 			expected := sign(r.Method, r.URL.RequestURI(), secret, ts)
-			if !hmac.Equal([]byte(sig), []byte(expected)) {
+			if !ghmac.Equal([]byte(sig), []byte(expected)) {
 				http.Error(w, "unauthorized", http.StatusUnauthorized)
 				return
 			}
