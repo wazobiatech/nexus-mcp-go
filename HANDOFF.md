@@ -1,8 +1,8 @@
 # ZIN-4663 — nexus-mcp-go (Go SDK) Handoff
 
-## Status: COMPLETED
+## Status: 🔍 Review
 
-All blockers and noted issues resolved. PR is ready to merge.
+Blocking PR review issues resolved. Deferred design decisions documented below.
 
 ---
 
@@ -40,4 +40,13 @@ All blockers and noted issues resolved. PR is ready to merge.
 
 ---
 
-## Nothing Left
+## Open / Deferred (not blockers)
+
+- **Body not signed**: `POST /mcp/call` arguments aren't covered by HMAC. Replay possible within 300s window. Acceptable for internal mesh — needs explicit decision in contract if intentional.
+- **No server-side inputSchema validation**: arguments passed straight to handler. Could validate against `InputSchema` before calling `Handler`.
+- **`ghmac.Equal` on hex strings**: compares ASCII bytes, not raw digest bytes — both sides are always 64 chars so length is equal and timing is safe. Functionally correct, but comparing raw `[]byte` digests would be more idiomatic.
+
+## Before Tagging
+
+1. Tag `v1.0.0` and push to trigger Bitbucket pipeline.
+2. Go module proxy ingests public tags automatically — no extra config needed for a public repo.

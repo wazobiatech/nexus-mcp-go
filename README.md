@@ -5,7 +5,7 @@ Go SDK for the Nexus MCP ecosystem.
 ## Installation
 
 ```bash
-go get github.com/wazobiatech/nexus-mcp-go
+go get github.com/wazobiatech/nexus-mcp-go@v1.0.0
 ```
 
 ## Usage
