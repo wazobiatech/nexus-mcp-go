@@ -1,35 +1,27 @@
 image: golang:1.22
 
-pipelines:
-  default:
-    - step:
+definitions:
+  steps:
+    - step: &test
         name: Vet & Test
         script:
-          - curl -L -o vectors.json
-              https://raw.githubusercontent.com/wazobiatech/nexus-mcp-contract/v1.0.0/vectors.json
+          - git clone --depth 1 git@bitbucket.org:wazobiatech/nexus-mcp-contract.git ../nexus-mcp-contract
+          - cp ../nexus-mcp-contract/vectors.json vectors.json
           - go vet ./...
           - go test ./...
           - go test -v ./hmac/...
 
+pipelines:
+  default:
+    - step: *test
+
   branches:
     main:
-      - step:
-          name: Vet & Test
-          script:
-            - curl -L -o vectors.json
-                https://raw.githubusercontent.com/wazobiatech/nexus-mcp-contract/v1.0.0/vectors.json
-            - go vet ./...
-            - go test ./...
+      - step: *test
 
   tags:
     v*:
-      - step:
-          name: Vet & Test
-          script:
-            - curl -L -o vectors.json
-                https://raw.githubusercontent.com/wazobiatech/nexus-mcp-contract/v1.0.0/vectors.json
-            - go vet ./...
-            - go test ./...
+      - step: *test
       - step:
           name: Tag Go module
           script:
