@@ -1,0 +1,27 @@
+image: golang:1.22
+
+definitions:
+  steps:
+    - step: &test
+        name: Vet & Test
+        script:
+          - curl -fsSL -o vectors.json https://raw.githubusercontent.com/wazobiatech/nexus-mcp-contract/v1.0.0/vectors.json
+          - go vet ./...
+          - go test ./...
+          - go test -v ./hmac/...
+
+pipelines:
+  default:
+    - step: *test
+
+  branches:
+    main:
+      - step: *test
+
+  tags:
+    v*:
+      - step: *test
+      - step:
+          name: Tag Go module
+          script:
+            - echo "Tag ${BITBUCKET_TAG} pushed — Go module proxy will ingest shortly."
