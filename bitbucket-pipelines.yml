@@ -1,0 +1,38 @@
+image: golang:1.22
+
+pipelines:
+  default:
+    - step:
+        name: Vet & Test
+        script:
+          - curl -L -o vectors.json
+              https://raw.githubusercontent.com/wazobiatech/nexus-mcp-contract/v1.0.0/vectors.json
+          - go vet ./...
+          - go test ./...
+          - go test -v ./hmac/...
+
+  branches:
+    main:
+      - step:
+          name: Vet & Test
+          script:
+            - curl -L -o vectors.json
+                https://raw.githubusercontent.com/wazobiatech/nexus-mcp-contract/v1.0.0/vectors.json
+            - go vet ./...
+            - go test ./...
+
+  tags:
+    v*:
+      - step:
+          name: Vet & Test
+          script:
+            - curl -L -o vectors.json
+                https://raw.githubusercontent.com/wazobiatech/nexus-mcp-contract/v1.0.0/vectors.json
+            - go vet ./...
+            - go test ./...
+      - step:
+          name: Tag Go module
+          script:
+            # The Go module proxy ingests public tags automatically.
+            # For private modules, configure GOPRIVATE and a private proxy.
+            - echo "Tag ${BITBUCKET_TAG} pushed — Go module proxy will ingest shortly."
