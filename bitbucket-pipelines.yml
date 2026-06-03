@@ -5,7 +5,7 @@ definitions:
     - step: &test
         name: Vet & Test
         script:
-          - git clone --depth 1 git@bitbucket.org:wazobiatech/nexus-mcp-contract.git ../nexus-mcp-contract
+          - git clone --depth 1 https://x-token-auth:${BITBUCKET_TOKEN}@bitbucket.org/wazobiatech/nexus-mcp-contract.git ../nexus-mcp-contract
           - cp ../nexus-mcp-contract/vectors.json vectors.json
           - go vet ./...
           - go test ./...
